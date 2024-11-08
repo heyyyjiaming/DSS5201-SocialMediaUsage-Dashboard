@@ -6,14 +6,6 @@ import openpyxl
 from io import StringIO, BytesIO
 
 
-# def load_original_data(url):
-#     response = requests.get(url)
-#     if response.status_code == 200:
-#         return pd.read_csv(StringIO(response.text))
-#     else:
-#         st.error("Failed to load data from GitHub.")
-#         return None
-
 #################################################### Original Data ####################################################
 ## Read data from GitHub
 ### % of U.S. adults who say they ever use ... by ...
@@ -40,14 +32,12 @@ us_popular_platforms['Year'] = pd.to_datetime(us_popular_platforms['Year'])
 
 
 
-
 #################################################### Streamlit ####################################################
 st.title("American's Social Media Usage Dashboard 🇺🇸")
 link1 = "https://www.pewresearch.org/internet/2024/01/31/americans-social-media-use/"
 st.write("You can find the related report [here](%s)"%link1)
 st.header("Original Data")
 ori_on = st.toggle("Would you like to see the original data?", False)
-# col1, col2 = st.columns(2, gap="medium", vertical_alignment="bottom")
 
 def placeholder(lines):
     for _ in range(lines):
