@@ -1,16 +1,40 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import requests
+from io import StringIO
+
+
+# def load_original_data(url):
+#     response = requests.get(url)
+#     if response.status_code == 200:
+#         return pd.read_csv(StringIO(response.text))
+#     else:
+#         st.error("Failed to load data from GitHub.")
+#         return None
 
 #################################################### Original Data ####################################################
 
 ## % of U.S. adults who say they ever use ... by ...
-us_usage_by_group = pd.read_excel("../data/original/Social Media Usage_pivoted.xlsx", header=0)
+us_usage_by_group_url = "https://github.com/heyyyjiaming/DSS5201-SocialMediaUsage-Dashboard/blob/main/data/Social%20Media%20Usage_pivoted.xlsx"
+# us_usage_by_group = pd.read_excel("../data/original/Social Media Usage_pivoted.xlsx", header=0)
+response1 = requests.get(us_usage_by_group_url)
+if response1.status_code == 200:
+    us_usage_by_group = pd.read_excel(StringIO(response1.text), header=0)
+else:
+    st.error("Failed to load data from GitHub.")
+# us_usage_by_group = load_original_data(us_usage_by_group_url)
 
 
 ## % of U.S. adults who say they ever use … (Polls from 2012-2021)
-us_popular_platforms = pd.read_csv("../data/original/which_social_media_platforms_are_most_popular_data_2024-01-31.csv", 
-                                   skiprows=3, delimiter=',', header=0)
+us_popular_platforms_url
+response2 = requests.get(us_popular_platforms_url)
+if response2.status_code == 200:
+    us_popular_platforms = pd.read_csv(StringIO(response2.text), skiprows=3, delimiter=',', header=0)
+else:
+    st.error("Failed to load data from GitHub.")
+# us_popular_platforms = pd.read_csv("../data/original/which_social_media_platforms_are_most_popular_data_2024-01-31.csv", 
+#                                    skiprows=3, delimiter=',', header=0)
 us_popular_platforms = us_popular_platforms.iloc[:-3, :]
 
 us_popular_platforms.rename(columns={'\t\t\tYear': 'Year'}, inplace=True)
@@ -53,5 +77,6 @@ if ori_on:
 
 
 st.header("Reproduction 📊")
+
 
 
