@@ -66,3 +66,44 @@ else:
     st.plotly_chart(fig, use_container_width=True)
 
 
+
+## ZY add
+# leading countries data
+leading_countries_url = "https://raw.githubusercontent.com/heyyyjiaming/DSS5201-SocialMediaUsage-Dashboard/refs/heads/main/data/x-twitter_-countries-with-the-largest-audience-2024.xlsx"
+response3 = requests.get(leading_countries_url)
+if response3.status_code == 200:
+    leading_countries = pd.read_excel(BytesIO(response3.content), engine='openpyxl',
+                                      sheet_name='Data', skiprows=4, usecols="B:C", 
+                                      names=["Country", "Audience_Size"])
+else:
+    st.error("Failed to load data from GitHub.")
+    
+
+# World countries GeoJSON data
+# World countries GeoJSON data
+geojson_url = "https://raw.githubusercontent.com/heyyyjiaming/DSS5201-SocialMediaUsage-Dashboard/refs/heads/main/data/world_countries.geojson"
+response_geojson = requests.get(geojson_url)
+if response_geojson.status_code == 200:
+    world_geojson = response_geojson.json()  # Use .json() directly
+else:
+    st.error("Failed to load GeoJSON data from GitHub.")
+
+
+    
+    
+# Create a choropleth map and display it in Streamlit
+fig = px.choropleth_mapbox(
+    data_frame=leading_countries, 
+    geojson=world_geojson, 
+    locations="Country", 
+    color="Audience_Size",
+    featureidkey="properties.ADMIN",  # Match the geojson country name field
+    mapbox_style="carto-positron",
+    center={"lat": 0, "lon": 20},  # Center on the world
+    zoom=1.5,
+    color_continuous_scale="Blues",
+    title="Countries with the Largest Twitter Audience in 2024"
+)
+
+st.plotly_chart(fig, use_container_width=True)
+    
