@@ -5,3 +5,4 @@ plotly
 plotnine
 seaborn
 openpyxl
+json
