@@ -6,7 +6,6 @@ plotly
 plotnine
 seaborn
 openpyxl
-json
 fiona
 geopandas
 
