@@ -1,3 +1,5 @@
+python_version >= "3.7"
+pip>=24.3.1
 streamlit
 pandas
 numpy
@@ -6,3 +8,5 @@ plotnine
 seaborn
 openpyxl
 json
+fiona
+geopandas
