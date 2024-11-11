@@ -79,24 +79,24 @@ st.header("Reproduction 📊")
 
 
 ## LJM add
-st.markdown("## TikTok sees growth since 2021")
+st.markdown("### TikTok sees growth since 2021")
 def clean_us_social_media_data(df):
-    # 将数据从宽格式转换为长格式
+    # Melt the dataframe
     us_social_media_tidy = df.melt(id_vars=["Year"], var_name="Platform", value_name="Percentage")
 
-    # 转换 Year 列为日期格式
+    # Transform year to datetime tyoe
     us_social_media_tidy["Year"] = pd.to_datetime(us_social_media_tidy["Year"])
 
-    # 去掉百分号并将 Percentage 转换为浮点数
+    # Remove the % sign and transform to float type
     us_social_media_tidy["Percentage"] = us_social_media_tidy["Percentage"].str.replace('%', '').astype(float)
 
     return us_social_media_tidy
 
-# 清理数据
+# clean data
 us_social_media_tidy = clean_us_social_media_data(us_popular_platforms)
 
 
-# 创建用于展示社交媒体平台流行度变化的折线图
+# Create plot
 def create_social_media_popularity_plot(data):
     fig = px.line(
         data, 
@@ -108,44 +108,45 @@ def create_social_media_popularity_plot(data):
         color_discrete_sequence=px.colors.qualitative.Pastel
     )
 
-    # 设置 y 轴范围和百分号后缀
+    # Set the scale of y axis and add % sign on axis
     fig.update_yaxes(range=[0, 100], ticksuffix="%")
 
-    # 添加竖直线以指示调查模式的更改
+    # Add vertical line 
     fig.add_vline(
-        x='2022-01-01',  # 在需要的日期位置添加垂直线
+        x='2022-01-01',  
         line_width=2,
         line_color="gray"
     )
 
-    # 添加垂直线的注释
+    # Add annotation for vertical line
     fig.add_annotation(
         x='2022-01-01',
-        y=95,  # 注释在图表上方的显示位置
+        y=95,  
         text="Change in survey mode --",
         showarrow=False,
         font=dict(size=12, color="gray"),
         xanchor='left', 
-        xshift=-160
+        xshift=-130
     )
 
-    # 更新交互标签的格式
+    # Set the format of interactive label
     fig.update_traces(
         hovertemplate='%{x|%d-%m-%Y} <br> %{fullData.name}: %{y}% <extra></extra>', 
         marker=dict(size=8)
     )
 
-    # 设置 x 轴范围
+    # Set the scale of x axis
     fig.update_xaxes(range=['2012-07-01', '2023-12-31'])
 
     return fig
 
-# 创建并显示图表
+# Create plot
 fig = create_social_media_popularity_plot(us_social_media_tidy)
-st.plotly_chart(fig)
+st.plotly_chart(fig, use_container_width=True)
 
 ### ZY add
-st.markdown("## Stark age differences in who uses each app or site")
+st.markdown("### Stark age differences in who uses each app or site")
+st.markdown("##### 1. Recreate the original plot on the website")
 
 # Convert percentage values and clean data function
 
@@ -203,10 +204,10 @@ def clean_and_prepare_data(df):
     )
     df_long['Age Group'] = pd.Categorical(df_long['Age Group'], categories=age_groups, ordered=True)
 
-    return age_gap_diff, df_long, age_colors
+    return usage_by_age, age_gap_diff, df_long, age_colors
 
 # Apply the cleaning and preparation function to the loaded data
-age_gap_diff, df_long, age_colors = clean_and_prepare_data(us_usage_by_group)
+usage_by_age, age_gap_diff, df_long, age_colors = clean_and_prepare_data(us_usage_by_group)
 
 # 使用处理好的数据绘制图表的函数
 def create_age_gap_scatter_plot(df_long, age_gap_diff, age_colors):
@@ -287,8 +288,51 @@ def create_age_gap_scatter_plot(df_long, age_gap_diff, age_colors):
 fig = create_age_gap_scatter_plot(df_long, age_gap_diff, age_colors)
 st.plotly_chart(fig)
 
+st.markdown("##### 2. Improve the visualization by using the stack diagram")
+
+def clean_age_gap_stack_plot_data(usage_by_age):
+    # Normalize the percentages for each platform to ensure they sum up to 100%
+    usage_by_age['Percentage_scaled'] = usage_by_age.groupby('Platform')['Percentage'].transform(lambda x: (x / x.sum()) * 100)
+    
+    # Pivot the DataFrame so that age categories become columns
+    usage_by_age_scaled = usage_by_age.pivot(index='Platform', columns='Category', values='Percentage_scaled').reset_index()
+    
+    return usage_by_age_scaled
+
+usage_by_age_scaled = clean_age_gap_stack_plot_data(usage_by_age)
+
+def create_age_gap_stack_plot(usage_by_age_scaled):
+    age_groups = ['18-29', '30-49', '50-64', '65+']
+    # Melt the dataframe to long format for Plotly
+    usage_by_age_scaled_long = usage_by_age_scaled.melt(id_vars='Platform', value_vars=age_groups,
+                                                        var_name='Age Group', value_name='Percentage')
+    
+    # Create the stacked bar plot using Plotly Express
+    fig = px.bar(usage_by_age_scaled_long, 
+                 x='Platform', 
+                 y='Percentage', 
+                 color='Age Group', 
+                 title="Age group distribution by social media platform",
+                 labels={'Percentage': 'Percentage (%)'},
+                 color_discrete_map=age_colors,  # Apply custom colors for age groups
+                 height=600)
+    
+    # Update layout to match the original Matplotlib plot
+    fig.update_layout(barmode='stack',
+                      xaxis_title="Platform",
+                      yaxis_title="Percentage (%)",
+                      legend_title="Age Group",
+                      legend=dict(title="Age Group", x=1.05, y=1, traceorder='normal', orientation='v')
+                      )
+    
+    return fig
+
+# Creat the stack plot
+fig = create_age_gap_stack_plot(usage_by_age_scaled)
+st.plotly_chart(fig, use_container_width=True)
+
 ## NMY add
-st.markdown("## Other demographic differences in use of online platforms")
+st.markdown("### Other demographic differences in use of online platforms")
 def clean_and_prepare_heatmap_data(existing_df):
     # 定义手动输入的数据
     categories = ['Total', 'HS or less', 'Some college', 'College+', 'Urban', 'Suburban', 'Rural']
@@ -399,7 +443,7 @@ def create_annotated_heatmap(data):
     return fig
 
 # 显示每个维度的热力图，将标题放在左侧
-st.header("Social Media Usage by U.S. Demographics")
+st.markdown("##### Social Media Usage by U.S. Demographics")
 for title, data in grouped_data.items():
     st.markdown(f"###### {title}")  # 将标题作为 Markdown 文本放在热力图上方
     heatmap_fig = create_annotated_heatmap(data)
