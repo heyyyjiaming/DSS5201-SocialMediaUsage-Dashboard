@@ -8,6 +8,8 @@ import plotly.express as px
 from itertools import chain
 
 
+
+## DJM add
 # Read data from GitHub
 ## Average time spent per day on select social media platforms in the United States in June 2023 
 us_avg_time_2023_url = "https://raw.githubusercontent.com/heyyyjiaming/DSS5201-SocialMediaUsage-Dashboard/refs/heads/main/data/us-users-daily-engagement-with-leading-social-media-platforms-2023.xlsx"
@@ -37,14 +39,6 @@ us_avg_time_by_age.iloc[:, 1:] = us_avg_time_by_age.iloc[:, 1:] * 100
 
 us_avg_time_by_age_melted = us_avg_time_by_age.melt(id_vars='Age', var_name='Platform', value_name='Time')
     
-    
-    
-    
-st.header("Average Daily Time Spent on Social Media")
-
-st.markdown("Still working on it...")
-# st.dataframe(us_avg_time_2023)
-# st.dataframe(us_avg_time_by_age)
 
 
 def plot_avg_time_by_age(data, platform):
@@ -56,14 +50,6 @@ def plot_avg_time_by_age(data, platform):
 colors = ['blue', 'pink', 'green', 'orange']
 platform_color_dict = dict(zip(us_avg_time_by_age.columns[1:], colors))
 
-selected_platform = st.selectbox("Please select a platform below", list(chain(['None'],us_avg_time_by_age.columns[1:])))   
-if selected_platform=='None':
-    fig = px.bar(us_avg_time_by_age_melted, x='Age', y='Time', color='Platform', facet_col='Platform', facet_col_wrap=0,
-                 title=f'Average time spent on different platforms in the US by age group')
-    st.plotly_chart(fig, use_container_width=True)
-else:
-    fig = plot_avg_time_by_age(us_avg_time_by_age, selected_platform)
-    st.plotly_chart(fig, use_container_width=True)
 
 
 
@@ -89,9 +75,21 @@ else:
     st.error("Failed to load GeoJSON data from GitHub.")
 
 
+
+st.header("Other findings in Social Media Usage 🔍")
+
+st.markdown("#### 1. 2023 US Daily Time spent on different social network")
+selected_platform = st.selectbox("Please select a platform below", list(chain(['None'],us_avg_time_by_age.columns[1:])))   
+if selected_platform=='None':
+    fig = px.bar(us_avg_time_by_age_melted, x='Age', y='Time', color='Platform', facet_col='Platform', facet_col_wrap=0,
+                 title=f'Average time spent on different platforms in the US by age group')
+    st.plotly_chart(fig, use_container_width=True)
+else:
+    fig = plot_avg_time_by_age(us_avg_time_by_age, selected_platform)
+    st.plotly_chart(fig, use_container_width=True)
+
     
-    
-# Create a choropleth map and display it in Streamlit
+st.markdown("#### 2. 2024 Wordlwide Twitter Audience")
 fig = px.choropleth_mapbox(
     data_frame=leading_countries, 
     geojson=world_geojson, 

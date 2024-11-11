@@ -79,7 +79,7 @@ st.header("Reproduction 📊")
 
 
 ## LJM add
-st.markdown("### TikTok sees growth since 2021")
+st.markdown("## TikTok sees growth since 2021")
 def clean_us_social_media_data(df):
     # Melt the dataframe
     us_social_media_tidy = df.melt(id_vars=["Year"], var_name="Platform", value_name="Percentage")
@@ -145,8 +145,7 @@ fig = create_social_media_popularity_plot(us_social_media_tidy)
 st.plotly_chart(fig, use_container_width=True)
 
 ### ZY add
-st.markdown("### Stark age differences in who uses each app or site")
-st.markdown("##### 1. Recreate the original plot on the website")
+st.markdown("## Stark age differences in who uses each app or site")
 
 # Convert percentage values and clean data function
 
@@ -332,7 +331,7 @@ fig = create_age_gap_stack_plot(usage_by_age_scaled)
 st.plotly_chart(fig, use_container_width=True)
 
 ## NMY add
-st.markdown("### Other demographic differences in use of online platforms")
+st.markdown("## Other demographic differences in use of online platforms")
 def clean_and_prepare_heatmap_data(existing_df):
     # 定义手动输入的数据
     categories = ['Total', 'HS or less', 'Some college', 'College+', 'Urban', 'Suburban', 'Rural']
@@ -443,7 +442,7 @@ def create_annotated_heatmap(data):
     return fig
 
 # 显示每个维度的热力图，将标题放在左侧
-st.markdown("##### Social Media Usage by U.S. Demographics")
+st.header("Social Media Usage by U.S. Demographics")
 for title, data in grouped_data.items():
     st.markdown(f"###### {title}")  # 将标题作为 Markdown 文本放在热力图上方
     heatmap_fig = create_annotated_heatmap(data)
