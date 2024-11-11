@@ -404,11 +404,7 @@ def clean_and_prepare_heatmap_data(existing_df):
 # 调用清理函数
 grouped_data = clean_and_prepare_heatmap_data(us_usage_by_group)
 
-# 创建热力图的函数，带有数值注释
-import plotly.graph_objects as go
-import streamlit as st
-
-# 创建热力图的函数，带有数值注释和自定义颜色条长度
+# 创建热力图的函数，带有数值注释和自定义颜色条位置和长度
 def create_annotated_heatmap(data):
     fig = go.Figure(
         data=go.Heatmap(
@@ -419,31 +415,91 @@ def create_annotated_heatmap(data):
             zmin=0,
             zmax=100,
             text=data.values,  # 将数值添加为注释
-            texttemplate="%{text}%",  # 设置格式为百分比
-            textfont={"size": 10},  # 调整字体大小
+            texttemplate="%{text}",  
+            textfont={"size": 15},  # 调整字体大小
             colorbar=dict(
                 title='% of U.S. adults who say they ever use...',
                 titleside='top',
-                thickness=15,
-                x=1.02,
-                len=1.2
+                orientation='h',  # 切换到水平颜色条
+                thickness=20,
+                x=0.5,
+                y=1.5,  # 将颜色条在图表顶部的位置上调
+                len=0.6
             )
         )
     )
     
+    cell_width=150
+    cell_height=50
+    
     fig.update_layout(
-        width=1200,
-        height=200,  # 减少图表高度
-        margin=dict(l=10, r=10, t=20, b=10),  # 减少图表边距，移除顶部标题
+        width= cell_width * len(data.columns) +300,
+        height= cell_height * len(data.index) +200,
+        margin=dict(l=10, r=10, t=0, b=0),  # 增加顶部边距以容纳颜色条的标题
         xaxis=dict(side='top'),
         yaxis=dict(autorange="reversed")
     )
 
     return fig
 
-# 显示每个维度的热力图，将标题放在左侧
-st.markdown("**Social Media Usage by U.S. Demographics**")
-for title, data in grouped_data.items():
-    st.markdown(f"###### {title}")  # 将标题作为 Markdown 文本放在热力图上方
-    heatmap_fig = create_annotated_heatmap(data)
-    st.plotly_chart(heatmap_fig, use_container_width=True)
+
+def create_annotated_bar(df):
+    # 创建条形图
+    fig = go.Figure()
+
+    # 遍历每个类别并添加到图表中
+    for category in df.index:
+        fig.add_trace(go.Bar(
+            x=df.columns,  # 平台名称
+            y=df.loc[category],  # 对应的值
+            name=category  # 类别名称
+        ))
+
+    # 更新布局
+    fig.update_layout(
+        xaxis_title='Platform',
+        yaxis_title='% of U.S. adults who say they ever use...',
+        barmode='group',  # 显示分组的条形图
+        width=900,  # 设置图像宽度
+        height=500,  # 设置图像高度
+        legend=dict(
+            orientation="h",  # 横向布局颜色条
+            x=0.5,
+            xanchor="center",
+            y=1.1,
+            yanchor="bottom"
+        ),
+    )
+    
+    return fig
+
+
+cover_url = "https://raw.githubusercontent.com/heyyyjiaming/DSS5201-SocialMediaUsage-Dashboard/refs/heads/main/img/heatmap.png"
+st.image(cover_url)
+
+
+dim_op = st.selectbox("Please select a dimension you want to check",
+                                    ('Total', 'Age', 'Gender', 'Income', 'Political Affiliation', 'Race & Ethnicity', 'Education'))
+
+catglist = grouped_data[f'{dim_op}'].index.tolist()
+catglist.insert(0, '*All')
+
+catg_op = '*All'
+if dim_op and (dim_op != 'Total'):
+    catg_op = st.selectbox("Please select a category you want to check", catglist)
+
+data = grouped_data[dim_op]
+if (catg_op != '*All'):
+    data = data.loc[[catg_op]] 
+
+
+st.markdown(f"###### Social Media Usage by {dim_op} group")
+
+st.markdown(f"Heatmap")
+heatmap_fig = create_annotated_heatmap(data)
+st.plotly_chart(heatmap_fig, use_container_width=True)
+    
+
+st.markdown(f"Bar Chart")
+bar_fig = create_annotated_bar(data)
+st.plotly_chart(bar_fig, use_container_width=True)
