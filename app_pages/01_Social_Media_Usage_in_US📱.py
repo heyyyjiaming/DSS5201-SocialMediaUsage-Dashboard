@@ -85,10 +85,12 @@ def clean_us_social_media_data(df):
     us_social_media_tidy = df.melt(id_vars=["Year"], var_name="Platform", value_name="Percentage")
 
     # Transform year to datetime tyoe
-    us_social_media_tidy["Year"] = pd.to_datetime(us_social_media_tidy["Year"])
+    us_social_media_tidy["Year"] = pd.to_datetime(us_social_media_tidy["Year"], errors='coerce')
 
     # Remove the % sign and transform to float type
     us_social_media_tidy["Percentage"] = us_social_media_tidy["Percentage"].str.replace('%', '').astype(float)
+    
+    us_social_media_tidy.dropna(subset=['Year', 'Percentage'], inplace=True)
 
     return us_social_media_tidy
 
@@ -103,7 +105,7 @@ def create_social_media_popularity_plot(data):
         x="Year", 
         y="Percentage", 
         color="Platform",
-        title="Which Social Media Platforms Are Most Popular",
+        title="Which Social Media Platform Is More Popular",
         markers=True,
         color_discrete_sequence=px.colors.qualitative.Pastel
     )
@@ -131,7 +133,7 @@ def create_social_media_popularity_plot(data):
 
     # Set the format of interactive label
     fig.update_traces(
-        hovertemplate='%{x|%d-%m-%Y} <br> %{fullData.name}: %{y}% <extra></extra>', 
+        hovertemplate='%{x|%d-%m-%Y} <br> %{fullData.name}: %{y} <extra></extra>', 
         marker=dict(size=8)
     )
 
@@ -139,7 +141,7 @@ def create_social_media_popularity_plot(data):
     fig.update_xaxes(range=['2012-07-01', '2023-12-31'])
 
     return fig
-
+    
 # Create plot
 fig = create_social_media_popularity_plot(us_social_media_tidy)
 st.plotly_chart(fig, use_container_width=True)
@@ -332,6 +334,9 @@ st.plotly_chart(fig, use_container_width=True)
 
 ## NMY add
 st.markdown("### 3.Other demographic differences in use of online platforms")
+st.markdown("##### How use of online platforms differs among some U.S. demographic groups")
+st.markdown("##### - such as Facebook, Instagram or TikTok - ")
+
 def clean_and_prepare_heatmap_data(existing_df):
     # 定义手动输入的数据
     categories = ['Total', 'HS or less', 'Some college', 'College+', 'Urban', 'Suburban', 'Rural']
