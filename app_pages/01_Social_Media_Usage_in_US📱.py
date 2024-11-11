@@ -79,7 +79,7 @@ st.header("Reproduction 📊")
 
 
 ## LJM add
-st.markdown("### 1.TikTok sees growth since 2021")
+st.markdown("#### 1.Platform popularity changing recent years in U.S.")
 def clean_us_social_media_data(df):
     # Melt the dataframe
     us_social_media_tidy = df.melt(id_vars=["Year"], var_name="Platform", value_name="Percentage")
@@ -146,8 +146,23 @@ def create_social_media_popularity_plot(data):
 fig = create_social_media_popularity_plot(us_social_media_tidy)
 st.plotly_chart(fig, use_container_width=True)
 
+st.markdown("##### :blue[* Improve the visualization by using the animation]")
+# Embad code
+flourish_embed_code = """
+<div class="flourish-embed flourish-bar-chart-race" data-src="visualisation/20240242">
+    <script src="https://public.flourish.studio/resources/embed.js"></script>
+    <noscript>
+        <img src="https://public.flourish.studio/visualisation/20240242/thumbnail" width="100%" alt="bar-chart-race visualization" />
+    </noscript>
+</div>
+"""
+
+# Show animation
+st.components.v1.html(flourish_embed_code, height=600)
+
+
 ### ZY add
-st.markdown("### 2.Stark age differences in who uses each app or site")
+st.markdown("#### 2.Stark age differences in who uses each app or site")
 
 # Convert percentage values and clean data function
 
@@ -333,9 +348,9 @@ fig = create_age_gap_stack_plot(usage_by_age_scaled)
 st.plotly_chart(fig, use_container_width=True)
 
 ## NMY add
-st.markdown("### 3.Other demographic differences in use of online platforms")
-st.markdown("##### How use of online platforms differs among some U.S. demographic groups")
-st.markdown("##### - such as Facebook, Instagram or TikTok - ")
+st.markdown("#### 3.Demographic differences in use of online platforms")
+st.markdown("###### How use of online platforms differs among some U.S. demographic groups")
+st.markdown("###### - such as Facebook, Instagram or TikTok - ")
 
 def clean_and_prepare_heatmap_data(existing_df):
     # 定义手动输入的数据
