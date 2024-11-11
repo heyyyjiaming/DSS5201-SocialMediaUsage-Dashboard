@@ -287,7 +287,7 @@ def create_age_gap_scatter_plot(df_long, age_gap_diff, age_colors):
 fig = create_age_gap_scatter_plot(df_long, age_gap_diff, age_colors)
 st.plotly_chart(fig)
 
-st.markdown("##### * Improve the visualization by using the stack diagram")
+st.markdown("##### :blue[* Improve the visualization by using the stack diagram]")
 
 def clean_age_gap_stack_plot_data(usage_by_age):
     # Normalize the percentages for each platform to ensure they sum up to 100%
