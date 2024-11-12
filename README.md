@@ -1,19 +1,5 @@
-# 🎈 Blank app template
+# 🎈 DSS5201 Data Visualization - US Social Media Usage
 
-A simple Streamlit app template for you to modify!
+##### Welcome to our dashboard! 👾
+In this dashboard, we will reproduce the graphs from web and explore the social media usage in the US.
 
-[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://blank-app-template.streamlit.app/)
-
-### How to run it on your own machine
-
-1. Install the requirements
-
-   ```
-   $ pip install -r requirements.txt
-   ```
-
-2. Run the app
-
-   ```
-   $ streamlit run streamlit_app.py
-   ```
