@@ -38,7 +38,6 @@ us_avg_time_by_age.rename(columns={'Unnamed: 1': 'Age'}, inplace=True)
 us_avg_time_by_age.iloc[:, 1:] = us_avg_time_by_age.iloc[:, 1:] * 100
 
 us_avg_time_by_age_melted = us_avg_time_by_age.melt(id_vars='Age', var_name='Platform', value_name='Time')
-    
 
 
 def plot_avg_time_by_age(data, platform):
@@ -99,9 +98,43 @@ fig = px.choropleth_mapbox(
     mapbox_style="carto-positron",
     center={"lat": 0, "lon": 20},  # Center on the world
     zoom=1.5,
-    color_continuous_scale="Blues",
+    # color_continuous_scale="Blue",
     title="Countries with the Largest Twitter Audience in 2024"
 )
 
 st.plotly_chart(fig, use_container_width=True)
     
+
+
+## LJM add
+## Statistics of U.S. frequently used social media activities in 2019 by platforms 
+us_sm_activities_url = "https://raw.githubusercontent.com/heyyyjiaming/DSS5201-SocialMediaUsage-Dashboard/refs/heads/main/data/us-social-media-activities-2019-by-platform.xlsx"
+# us_sm_activities = pd.read_excel("../data/supplement/us-social-media-activities-2019-by-platform.xlsx.xlsx",
+#                                    sheet_name='Data', skiprows=4, header=0)
+response3 = requests.get(us_sm_activities_url)
+if response2.status_code == 200:
+    us_sm_activities = pd.read_excel(BytesIO(response3.content), engine='openpyxl',
+                                      sheet_name='Data', skiprows=4, header=0)
+else:
+    st.error("Failed to load data from GitHub.")
+us_sm_activities = us_sm_activities.dropna(how = 'all', axis = 0).dropna(how = 'all', axis = 1)
+us_sm_activities = us_sm_activities.iloc[:, :-1]
+us_sm_activities = us_sm_activities.rename(columns = {"Unnamed: 1" : "Activities"})
+us_sm_activities = us_sm_activities.melt(id_vars = "Activities", var_name = "Platform", value_name = "Percentage")
+
+st.markdown("#### 3.  Statistic of U.S. social media activities in 2019 by platforms")
+
+def create_us_sm_activities_plot(data):
+    fig = px.bar(data, x = 'Activities', y = 'Percentage', color = 'Platform', 
+                  barmode = "group", title = 'US Social Media Activities by Platform in 2019')
+    
+    fig.update_yaxes(range=[0, 100], ticksuffix="%")
+
+    return fig
+
+us_sm_activities_plot = create_us_sm_activities_plot(us_sm_activities)
+st.plotly_chart(us_sm_activities_plot, use_container_width=True)
+    
+
+
+

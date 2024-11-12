@@ -46,10 +46,10 @@ us_popular_platforms['Year'] = pd.to_datetime(us_popular_platforms['Year'])
 
 
 #################################################### Streamlit ####################################################
-st.title("American's Social Media Usage Dashboard 🇺🇸")
+st.header("American's Social Media Usage Dashboard")
 link1 = "https://www.pewresearch.org/internet/2024/01/31/americans-social-media-use/"
 st.write("You can find the related report [here](%s)"%link1)
-st.header("Original Data")
+st.subheader("Original Data")
 ori_on = st.toggle("Would you like to see the original data?", False)
 
 def placeholder(lines):
@@ -75,7 +75,7 @@ if ori_on:
         st.write(us_popular_platforms)
 
 
-st.header("Reproduction 📊")
+st.subheader("Reproduction 📊")
 
 
 ## LJM add
@@ -497,6 +497,10 @@ def create_annotated_bar(df):
 cover_url = "https://raw.githubusercontent.com/heyyyjiaming/DSS5201-SocialMediaUsage-Dashboard/refs/heads/main/img/heatmap.png"
 st.image(cover_url)
 
+st.markdown("<br>", unsafe_allow_html=True)
+st.markdown("<br>", unsafe_allow_html=True)
+st.markdown("##### :blue[* Improve the visualization with the user-friendly select box]")
+st.markdown("<br>", unsafe_allow_html=True)
 
 dim_op = st.selectbox("Please select a dimension you want to check",
                                     ('Total', 'Age', 'Gender', 'Income', 'Political Affiliation', 'Race & Ethnicity', 'Education'))
