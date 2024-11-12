@@ -503,7 +503,7 @@ st.markdown("##### :blue[* Improve the visualization with the user-friendly sele
 st.markdown("<br>", unsafe_allow_html=True)
 
 dim_op = st.selectbox("Please select a dimension you want to check",
-                                    ('Total', 'Age', 'Gender', 'Income', 'Political Affiliation', 'Race & Ethnicity', 'Education'))
+                                    ('Total', 'Gender', 'Race & Ethnicity', 'Age', 'Income', 'Residence',  'Education', 'Political Affiliation'))
 
 catglist = grouped_data[f'{dim_op}'].index.tolist()
 catglist.insert(0, '*All')
