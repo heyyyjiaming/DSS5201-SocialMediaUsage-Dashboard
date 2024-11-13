@@ -19,4 +19,4 @@ cover_url = "https://raw.githubusercontent.com/heyyyjiaming/DSS5201-SocialMediaU
 st.image(cover_url)
 
 st.subheader("Group Members (in alphametic order):")
-st.write("Ding Jiaming, Li Jingming, Niu Muyuan, Wang Hao, Zhang Yi")
+st.write("Ding Jiaming, Li Jingming, Niu Muyuan, Zhang Yi")
