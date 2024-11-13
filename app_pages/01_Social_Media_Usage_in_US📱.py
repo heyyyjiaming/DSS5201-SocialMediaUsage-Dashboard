@@ -494,8 +494,8 @@ def create_annotated_bar(df):
     return fig
 
 
-cover_url = "https://raw.githubusercontent.com/heyyyjiaming/DSS5201-SocialMediaUsage-Dashboard/refs/heads/main/img/heatmap.png"
-st.image(cover_url)
+hm_url = "https://raw.githubusercontent.com/heyyyjiaming/DSS5201-SocialMediaUsage-Dashboard/refs/heads/main/img/heatmap.png"
+st.image(hm_url)
 
 st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("<br>", unsafe_allow_html=True)
