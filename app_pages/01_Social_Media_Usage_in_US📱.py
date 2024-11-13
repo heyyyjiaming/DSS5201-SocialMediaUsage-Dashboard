@@ -61,8 +61,8 @@ if ori_on:
     col1, col2 = st.columns(2, gap="medium")
     with col1:
         dim_option = st.selectbox("Please select a dimension you want to check",
-                                    ('None', 'Age', 'Gender', 'Income', 'Political Affiliation', 'Race & Ethnicity'))
-        if dim_option == 'None':
+                                    ('All', 'Age', 'Gender', 'Income', 'Political Affiliation', 'Race & Ethnicity'))
+        if dim_option == 'All':
             st.markdown(f"% of U.S. adults who say they ever use ... by ...")
             st.dataframe(us_usage_by_group)
         else:
@@ -79,7 +79,7 @@ st.subheader("Reproduction 📊")
 
 
 ## LJM add
-st.markdown("#### 1.Platform popularity changing recent years in U.S.")
+st.markdown("#### 1.Platform Popularity Changing Recent Years in U.S.")
 def clean_us_social_media_data(df):
     # Melt the dataframe
     us_social_media_tidy = df.melt(id_vars=["Year"], var_name="Platform", value_name="Percentage")
@@ -162,7 +162,7 @@ st.components.v1.html(flourish_embed_code, height=600)
 
 
 ### ZY add
-st.markdown("#### 2.Stark age differences in who uses each app or site")
+st.markdown("#### 2.Age Range Distribution Across Different Platforms")
 
 # Convert percentage values and clean data function
 
@@ -328,7 +328,7 @@ def create_age_gap_stack_plot(usage_by_age_scaled):
                  x='Platform', 
                  y='Percentage', 
                  color='Age Group', 
-                 title="Age group distribution by social media platform",
+                 title="Stacked Age Distribution by Social Media Platform",
                  labels={'Percentage': 'Percentage (%)'},
                  color_discrete_map=age_colors,  # Apply custom colors for age groups
                  height=600)

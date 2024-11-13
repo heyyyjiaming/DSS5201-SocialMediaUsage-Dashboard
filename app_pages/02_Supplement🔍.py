@@ -75,34 +75,36 @@ else:
 
 
 
-st.header("Other findings in Social Media Usage 🔍")
+st.header("Other Findings in Social Media Usage 🔍")
 
-st.markdown("#### 1. 2023 US Daily Time spent on different social network")
-selected_platform = st.selectbox("Please select a platform below", list(chain(['None'],us_avg_time_by_age.columns[1:])))   
-if selected_platform=='None':
-    fig = px.bar(us_avg_time_by_age_melted, x='Age', y='Time', color='Platform', facet_col='Platform', facet_col_wrap=0,
-                 title=f'Average time spent on different platforms in the US by age group')
-    st.plotly_chart(fig, use_container_width=True)
+st.markdown("#### 1. 2023 US Daily Time spent on Different Social Network")
+selected_platform = st.selectbox("Please select a platform below", list(chain(['All'],us_avg_time_by_age.columns[1:])))   
+if selected_platform=='All':
+        fig = px.bar(us_avg_time_by_age_melted, x='Age', y='Time', color='Platform', facet_col='Platform', facet_col_wrap=0,
+                    title=f'Average time spent on different platforms in the US by age group')
+        st.plotly_chart(fig, use_container_width=True)
 else:
-    fig = plot_avg_time_by_age(us_avg_time_by_age, selected_platform)
-    st.plotly_chart(fig, use_container_width=True)
+        fig = plot_avg_time_by_age(us_avg_time_by_age, selected_platform)
+        st.plotly_chart(fig, use_container_width=True)
 
     
-st.markdown("#### 2. 2024 Wordlwide Twitter Audience")
-fig = px.choropleth_mapbox(
-    data_frame=leading_countries, 
-    geojson=world_geojson, 
-    locations="Country", 
-    color="Audience_Size",
-    featureidkey="properties.ADMIN",  # Match the geojson country name field
-    mapbox_style="carto-positron",
-    center={"lat": 0, "lon": 20},  # Center on the world
-    zoom=1.5,
-    # color_continuous_scale="Blue",
-    title="Countries with the Largest Twitter Audience in 2024"
-)
+st.markdown("#### 2. 2024 Wordlwide X (Twitter) Audience")
+with st.spinner("Loading the graph... Please wait... 🙇🏻‍♀️"):
+    fig = px.choropleth_mapbox(
+        data_frame=leading_countries, 
+        geojson=world_geojson, 
+        locations="Country", 
+        color="Audience_Size",
+        featureidkey="properties.ADMIN",  # Match the geojson country name field
+        mapbox_style="carto-positron",
+        center={"lat": 0, "lon": 20},  # Center on the world
+        zoom=1.5,
+        # color_continuous_scale="Blue",
+        title="Countries with the Largest Twitter Audience in 2024"
+    )
+    st.plotly_chart(fig, use_container_width=True)
 
-st.plotly_chart(fig, use_container_width=True)
+# st.plotly_chart(fig, use_container_width=True)
     
 
 
@@ -122,7 +124,7 @@ us_sm_activities = us_sm_activities.iloc[:, :-1]
 us_sm_activities = us_sm_activities.rename(columns = {"Unnamed: 1" : "Activities"})
 us_sm_activities = us_sm_activities.melt(id_vars = "Activities", var_name = "Platform", value_name = "Percentage")
 
-st.markdown("#### 3.  Statistic of U.S. social media activities in 2019 by platforms")
+st.markdown("#### 3.  Statistic of U.S. Social Media Activities in 2019 by Platforms")
 
 def create_us_sm_activities_plot(data):
     fig = px.bar(data, x = 'Activities', y = 'Percentage', color = 'Platform', 
