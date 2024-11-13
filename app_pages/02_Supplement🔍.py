@@ -77,7 +77,8 @@ else:
 
 st.header("Other Findings in Social Media Usage 🔍")
 
-st.markdown("#### 1. 2023 US Daily Time spent on Different Social Network")
+url1 = "https://www.statista.com/forecasts/368698/us-user-daily-minutes-social-network-by-age"
+st.markdown("#### 1. [2023 US Daily Time spent on Different Social Network](%s)" %url1)
 selected_platform = st.selectbox("Please select a platform below", list(chain(['All'],us_avg_time_by_age.columns[1:])))   
 if selected_platform=='All':
         fig = px.bar(us_avg_time_by_age_melted, x='Age', y='Time', color='Platform', facet_col='Platform', facet_col_wrap=0,
@@ -88,7 +89,8 @@ else:
         st.plotly_chart(fig, use_container_width=True)
 
     
-st.markdown("#### 2. 2024 Wordlwide X (Twitter) Audience")
+url2 = "https://www.statista.com/statistics/242606/number-of-active-twitter-users-in-selected-countries/"
+st.markdown("#### 2. [2024 Worldwide X (Twitter) Audience](%s)" %url2)
 with st.spinner("Loading the graph... Please wait... 🙇🏻‍♀️"):
     fig = px.choropleth_mapbox(
         data_frame=leading_countries, 
@@ -124,8 +126,10 @@ us_sm_activities = us_sm_activities.iloc[:, :-1]
 us_sm_activities = us_sm_activities.rename(columns = {"Unnamed: 1" : "Activities"})
 us_sm_activities = us_sm_activities.melt(id_vars = "Activities", var_name = "Platform", value_name = "Percentage")
 
-st.markdown("#### 3.  Statistic of U.S. Social Media Activities in 2019 by Platforms")
 
+
+url3 = "https://www.statista.com/statistics/200843/social-media-activities-by-platform-usa/"
+st.markdown("#### 3. [Statistic of U.S. Social Media Activities in 2019 by Platforms](%s)" %url3)
 def create_us_sm_activities_plot(data):
     fig = px.bar(data, x = 'Activities', y = 'Percentage', color = 'Platform', 
                   barmode = "group", title = 'US Social Media Activities by Platform in 2019')
